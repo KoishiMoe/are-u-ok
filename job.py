@@ -73,7 +73,7 @@ class Job:
 
     @property
     def _update_info_body(self) -> str:
-        return f'_token={self._token}&jibenxinxi_shifoubenrenshangbao=1&profile%5Bxuegonghao%5D={self._username}&profile%5Bsuoshubanji%5D={self._class}&jiankangxinxi_muqianshentizhuangkuang=%E6%AD%A3%E5%B8%B8&xingchengxinxi_weizhishifouyoubianhua=0&qitashixiang_qitaxuyaoshuomingdeshixiang='
+        return f'_token={self._token}&jibenxinxi_shifoubenrenshangbao=1&profile%5Bxuegonghao%5D={self._username}&profile%5Bsuoshubanji%5D={self._class}&jiankangxinxi_muqianshentizhuangkuang=%E6%AD%A3%E5%B8%B8&xingchengxinxi_weizhishifouyoubianhua=0&qitashixiang_qitaxuyaoshuomingdeshixiang='.encode('utf-8')
 
     @property
     def _update_info_header(self) -> dict:
@@ -156,7 +156,7 @@ class Job:
                 return False, self._bad_info
 
             self._date = date[0]
-            self._class = klass[0]
+            self._class = klass[0].replace('\\\\','\\').encode('utf-8').decode('unicode-escape')
 
             return True, ''
         except Exception as e:
