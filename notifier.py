@@ -13,8 +13,8 @@ class Notifier:
 
 
 class MailNotifier(Notifier):
-    _from: Header = Header("自动打卡小助手", 'utf-8')
-    _to: Header = Header("小主", 'utf-8')
+    # _from: Header = Header("自动打卡小助手", 'utf-8')
+    # _to: Header = Header("小主", 'utf-8')
 
     def __init__(self, host: str, username: str, password: str, receiver: str):
         self._host: str = host
@@ -25,14 +25,16 @@ class MailNotifier(Notifier):
     def _make_content(self, subject: str, content: str) -> MIMEText:
         message = MIMEText(content, 'plain', 'utf-8')
         message['Subject'] = Header(subject, 'utf-8')
-        message['From'] = self._from
-        message['To'] = self._to
+        # message['From'] = self._from
+        # message['To'] = self._to
         return message
 
     def send(self, subject: str, content: str):
         try:
-            svr = smtplib.SMTP()
+            svr = smtplib.SMTP(host=self._host)
+            svr.set_debuglevel(True)
             svr.connect(self._host)
+            svr.starttls()
             svr.login(self._user, self._pass)
             message = self._make_content(subject, content)
             svr.sendmail(self._user, self._receiver, message.as_string())
