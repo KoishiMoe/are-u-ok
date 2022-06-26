@@ -1,4 +1,4 @@
-# Are u ok ?
+# Are u ok
 > 东北大学学生防控信息统计系统自动化打卡脚本
 
 
@@ -55,7 +55,7 @@
     
     如果需要邮件通知，需要再设定以下secret:
     
-    - `MAIL_HOST`: SMTP服务器地址，带上端口，如`smtp.ym.163.com:25` **不支持SSL**
+    - `MAIL_HOST`: SMTP服务器地址，带上端口，如`smtp.ym.163.com:587` **必须支持SSL**
     - `MAIL_USER`: SMTP登陆用的用户名
     - `MAIL_PASS`: SMTP登陆用的密码
     - `MAIL_RECEIVER`:接收通知邮件的邮箱地址
