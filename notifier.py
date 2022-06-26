@@ -32,7 +32,7 @@ class MailNotifier(Notifier):
     def send(self, subject: str, content: str):
         try:
             svr = smtplib.SMTP(host=self._host)
-            svr.set_debuglevel(True)
+            # svr.set_debuglevel(True)
             svr.connect(self._host)
             svr.starttls()
             svr.login(self._user, self._pass)
