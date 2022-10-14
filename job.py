@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 import re
+import sys
 import time
 from datetime import timedelta, timezone, datetime
 from random import randint
@@ -72,8 +73,14 @@ class Job:
         return f'https://pass.neu.edu.cn{self._login_path}'
 
     @property
-    def _update_info_body(self) -> str:
-        return f'_token={self._token}&jibenxinxi_shifoubenrenshangbao=1&profile%5Bxuegonghao%5D={self._username}&profile%5Bsuoshubanji%5D={self._class}&jiankangxinxi_muqianshentizhuangkuang=%E6%AD%A3%E5%B8%B8&xingchengxinxi_weizhishifouyoubianhua=0&qitashixiang_qitaxuyaoshuomingdeshixiang='.encode('utf-8')
+    def _update_info_body(self) -> bytes:
+        return f'_token={self._token}' \
+               f'&jibenxinxi_shifoubenrenshangbao=1' \
+               f'&profile%5Bxuegonghao%5D={self._username}' \
+               f'&profile%5Bsuoshubanji%5D={self._class}' \
+               f'&jiankangxinxi_muqianshentizhuangkuang=%E6%AD%A3%E5%B8%B8' \
+               f'&xingchengxinxi_weizhishifouyoubianhua=0' \
+               f'&qitashixiang_qitaxuyaoshuomingdeshixiang='.encode('utf-8')
 
     @property
     def _update_info_header(self) -> dict:
@@ -191,29 +198,29 @@ class Job:
         success, msg = self._login()
         if not success:
             notifier.send(f"{today} 登陆失败", msg)
-            return
+            sys.exit(1)
         # 进入平台
         success, msg = self._login_service()
         if not success:
             notifier.send(f"{today} 鉴权失败", msg)
-            return
+            sys.exit(1)
         # 获取信息
         success, msg = self._get_info()
         if not success:
             notifier.send(f"{today} 获取已有信息失败", msg)
-            return
+            sys.exit(1)
         # 是否今日有签到过
         if not self._is_reported():
             # 打卡
             success, msg = self._update_info()
             if not success:
                 notifier.send(f"{today} 打卡失败", msg)
-                return
+                sys.exit(1)
             notifier.send(f"{today} 打卡成功", "I'm fine, thank you.")
 
         # 上报体温
         success, msg = self._report_body_temperature()
         if not success:
             notifier.send(f"{today} 上报体温失败", msg)
-            return
+            sys.exit(1)
         notifier.send(f"{today} 上报体温成功", "I'm fine, really thank you.")
